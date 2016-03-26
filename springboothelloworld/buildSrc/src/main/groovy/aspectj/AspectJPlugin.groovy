@@ -1,14 +1,10 @@
 package aspectj
 
-// taken from spring security.
-// https://github.com/spring-projects/spring-security/blob/master/buildSrc/src/main/groovy/aspectj/AspectJPlugin.groovy
-
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.file.FileCollection
-import org.gradle.api.logging.LogLevel
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.TaskAction
@@ -18,6 +14,8 @@ import org.gradle.plugins.ide.eclipse.GenerateEclipseProject
 import org.gradle.plugins.ide.eclipse.model.BuildCommand
 import org.gradle.plugins.ide.eclipse.model.ProjectDependency
 
+// taken from spring security.
+// https://github.com/spring-projects/spring-security/blob/master/buildSrc/src/main/groovy/aspectj/AspectJPlugin.groovy
 /**
  *
  * @author Luke Taylor
@@ -44,17 +42,15 @@ class AspectJPlugin implements Plugin<Project> {
         }
 
         project.tasks.create(name: 'compileAspect', overwrite: true, description: 'Compiles AspectJ Source', type: Ajc) {
-            dependsOn project.configurations*.getTaskDependencyFromProjectDependency(true, "compileJava")
+            // dependsOn project.configurations*.getTaskDependencyFromProjectDependency(true, "compileJava")
 
-            dependsOn project.processResources
+            // dependsOn project.processResources
             sourceSet = project.sourceSets.main
             inputs.files(sourceSet.allSource)
             outputs.dir(sourceSet.output.classesDir)
             aspectPath = project.configurations.aspectpath
         }
-        project.tasks.compileJava.deleteAllActions()
-        project.tasks.compileJava.dependsOn project.tasks.compileAspect
-
+        project.tasks.compileJava.finalizedBy project.tasks.compileAspect
 
         project.tasks.create(name: 'compileTestAspect', overwrite: true, description: 'Compiles AspectJ Test Source', type: Ajc) {
             dependsOn project.processTestResources, project.compileJava, project.jar
@@ -63,8 +59,7 @@ class AspectJPlugin implements Plugin<Project> {
             outputs.dir(sourceSet.output.classesDir)
             aspectPath = project.files(project.configurations.aspectpath, project.jar.archivePath)
         }
-        project.tasks.compileTestJava.deleteAllActions()
-        project.tasks.compileTestJava.dependsOn project.tasks.compileTestAspect
+        project.tasks.compileTestJava.finalizedBy project.tasks.compileTestAspect
 
         project.tasks.withType(GenerateEclipseProject) {
             project.eclipse.project.file.whenMerged { p ->
@@ -97,22 +92,29 @@ class Ajc extends DefaultTask {
     FileCollection aspectPath
 
     Ajc() {
-        logging.captureStandardOutput(LogLevel.INFO)
+        // logging.captureStandardOutput(LogLevel.INFO)
     }
 
+    // http://fits.hatenablog.com/entry/2014/05/18/121337
+    // http://stackoverflow.com/questions/3660547/apt-and-aop-in-the-same-project-using-maven
     @TaskAction
     def compile() {
+        System.out.println("HEEHEEHEEHEEHEEHEEHEEHEEHEEHEEHEEHEEHEEHEE")
         logger.info("=" * 30)
         logger.info("=" * 30)
+        println("HHHHHHH '${aspectPath.asPath}'")
         logger.info("Running ajc ...")
         logger.info("classpath: ${sourceSet.compileClasspath.asPath}")
         logger.info("srcDirs $sourceSet.java.srcDirs")
         ant.taskdef(resource: "org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties", classpath: project.configurations.ajtools.asPath)
-        ant.iajc(classpath: sourceSet.compileClasspath.asPath, fork: 'true', destDir: sourceSet.output.classesDir.absolutePath,
+        ant.iajc(classpath: sourceSet.compileClasspath.asPath,
+                fork: 'true',
+                destDir: sourceSet.output.classesDir.absolutePath,
                 source: project.convention.plugins.java.sourceCompatibility,
                 target: project.convention.plugins.java.targetCompatibility,
-                aspectPath: aspectPath.asPath, sourceRootCopyFilter: '**/*.java', showWeaveInfo: 'true') {
-            sourceroots {
+                aspectPath: aspectPath.asPath,
+                showWeaveInfo: 'true') {
+            inpath {
                 sourceSet.java.srcDirs.each {
                     logger.info("	sourceRoot $it")
                     pathelement(location: it.absolutePath)
