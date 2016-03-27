@@ -1,6 +1,5 @@
 package com.example;
 
-import com.example.aop.annotation.Hello;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -13,11 +12,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 public class SpringBootHelloworldApplicationTests {
 	@Test
 	public void contextLoads() {
-	}
-
-	@Hello
-	public void hello() {
-
 	}
 
 }

@@ -1,8 +1,6 @@
 package com.example.service;
 
 import com.example.aop.MyAOP;
-import com.example.aop.annotation.Hello;
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
