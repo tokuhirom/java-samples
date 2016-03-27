@@ -18,6 +18,11 @@ task wrapper(type: Wrapper) {
 	gradleVersion = '2.12'
 }
 
+repositories {
+	mavenCentral()
+	jcenter()
+}
+
 apply plugin: "cz.malohlava"
 apply plugin: 'propdeps'
 apply plugin: 'propdeps-maven'
@@ -27,7 +32,7 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 ext.aspectjVersion = '1.8.4'
-apply plugin: 'aspectj'
+// apply plugin: 'aspectj'
 
 jar {
 	baseName = 'springboothelloworld'
@@ -35,10 +40,6 @@ jar {
 }
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-
-repositories {
-	mavenCentral()
-}
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-actuator')

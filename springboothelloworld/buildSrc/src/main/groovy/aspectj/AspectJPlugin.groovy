@@ -39,25 +39,33 @@ class AspectJPlugin implements Plugin<Project> {
         project.tasks.create(name: 'compileAspect', overwrite: true, description: 'Compiles AspectJ Source', type: Ajc) {
             dependsOn project.processResources, project.compileJava
 
-            sourceSet = project.sourceSets.main
-            // inputs.files(sourceSet.allSource)
-            // outputs.dir(sourceSet.output.classesDir)
-            buildDir = project.buildDir.toPath()
+            args = [
+                    "-inpath", project.sourceSets.main.output.classesDir.toPath(),
+                    "-showWeaveInfo",
+                    "-1.8",
+                    "-d", "${project.buildDir}/aspect/",
+                    "-classpath", project.sourceSets.main.compileClasspath.asPath,
+            ];
         }
         project.tasks.classes.dependsOn project.tasks.compileAspect
 
         project.tasks.create(name: 'compileTestAspect', overwrite: true, description: 'Compiles AspectJ Test Source', type: Ajc) {
             dependsOn project.processTestResources, project.compileTestJava
-            sourceSet = project.sourceSets.test
-            buildDir = project.buildDir.toPath()
+
+            args = [
+                    "-inpath", project.sourceSets.test.output.classesDir.toPath(),
+                    "-showWeaveInfo",
+                    "-1.8",
+                    "-d", "${project.buildDir}/test-aspect/",
+                    "-classpath", project.sourceSets.test.compileClasspath.asPath,
+            ];
         }
         project.tasks.testClasses.dependsOn project.tasks.compileTestAspect
     }
 }
 
 class Ajc extends DefaultTask {
-    SourceSet sourceSet
-    Path buildDir
+    String[] args
 
     Ajc() {
         // logging.captureStandardOutput(LogLevel.INFO)
@@ -72,18 +80,8 @@ class Ajc extends DefaultTask {
         logger.info("=" * 30)
         logger.info("=" * 30)
         logger.info("Running ajc ...")
-        logger.info("classpath: ${sourceSet.compileClasspath.asPath}")
-        logger.info("srcDirs $sourceSet.java.srcDirs")
 
-        def tmpDir = "${buildDir}/tmp/aspectj";
         MessageHandler handler = new MessageHandler(false);
-        String[] args = [
-                "-inpath", sourceSet.output.classesDir.toPath(),
-                "-showWeaveInfo",
-                "-1.8",
-                "-d", tmpDir,
-                "-classpath", sourceSet.compileClasspath.asPath,
-        ];
         println("args: $args")
         new Main().run(args as String[], handler);
         for (IMessage message : handler.getMessages(null, true)) {

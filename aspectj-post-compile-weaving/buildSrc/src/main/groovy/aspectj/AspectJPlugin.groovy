@@ -59,6 +59,8 @@ class AspectJPlugin implements Plugin<Project> {
                 def classpath = project.sourceSets.test.compileClasspath.files.grep({ it.exists() }).join(":")
                 args = [
                         "-inpath", project.sourceSets.test.output.classesDir.toPath(),
+                        "-aspectpath", project.sourceSets.main.output.classesDir.toPath(),
+                        "-aspectpath", project.sourceSets.test.output.classesDir.toPath(),
                         "-showWeaveInfo",
                         "-1.8",
                         "-d", tmpDir,
