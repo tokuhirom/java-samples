@@ -3,10 +3,10 @@
 This demo sends spring-boot metrics to graphite via dropwizard metrics.
 
 Graph Tree:
-<img src="https://www.evernote.com/l/AALcGcOVOLFOlqzZ1wAwtv1EwcxsJd11n0I">
+<img src="https://www.evernote.com/shard/s2/sh/dc19c395-38b1-4e96-acd9-d70030b6fd44/c1cc6c25dd759f42/res/22b4aae2-7beb-4051-869d-7d0f264444d2/skitch.png">
 
 Dashboard:
-<img src="https://www.evernote.com/l/AAJbfd-bwDhBeaOGiYiJsrpJ-Z8IJ3-CNvk">
+<img src="https://www.evernote.com/shard/s2/sh/5b7ddf9b-c038-4179-a386-898889b2ba49/f99f08277f8236f9/res/98e42f26-2d4c-4878-b6ce-7eed4b7ddddf/skitch.png">
 
 ## Graphite tips
 
