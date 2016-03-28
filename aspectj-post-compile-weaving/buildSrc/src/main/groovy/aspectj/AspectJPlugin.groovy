@@ -7,6 +7,7 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.tasks.TaskAction
 
@@ -41,13 +42,9 @@ class AspectJPlugin implements Plugin<Project> {
                 dependsOn project.processResources, project.compileJava
 
                 tmpDir = "${project.buildDir}/aspect/"
-                args = [
-                        "-inpath", project.sourceSets.main.output.classesDir.toPath(),
-                        "-showWeaveInfo",
-                        "-1.8",
-                        "-d", tmpDir,
-                        "-classpath", project.sourceSets.main.compileClasspath.asPath,
-                ];
+                inpath = project.sourceSets.main.output.classesDir.toPath()
+                aspectpath = project.sourceSets.main.output.classesDir
+                classpath = project.sourceSets.main.compileClasspath.files.grep({ it.exists() }).join(":")
                 dstDir = project.sourceSets.main.output.classesDir.toPath()
             }
             project.tasks.classes.dependsOn project.tasks.compileAspect
@@ -56,16 +53,10 @@ class AspectJPlugin implements Plugin<Project> {
                 dependsOn project.processTestResources, project.compileTestJava
 
                 tmpDir = "${project.buildDir}/test-aspect/"
-                def classpath = project.sourceSets.test.compileClasspath.files.grep({ it.exists() }).join(":")
-                args = [
-                        "-inpath", project.sourceSets.test.output.classesDir.toPath(),
-                        "-aspectpath", project.sourceSets.main.output.classesDir.toPath(),
-                        "-aspectpath", project.sourceSets.test.output.classesDir.toPath(),
-                        "-showWeaveInfo",
-                        "-1.8",
-                        "-d", tmpDir,
-                        "-classpath", classpath
-                ];
+                inpath = project.sourceSets.test.output.classesDir.toPath()
+                aspectpath = [project.sourceSets.main.output.classesDir,
+                        project.sourceSets.test.output.classesDir].join(":")
+                classpath = project.sourceSets.test.compileClasspath.files.grep({ it.exists() }).join(":")
                 dstDir = project.sourceSets.test.output.classesDir.toPath()
             }
             project.tasks.testClasses.dependsOn project.tasks.compileTestAspect
@@ -74,9 +65,11 @@ class AspectJPlugin implements Plugin<Project> {
 }
 
 class Ajc extends DefaultTask {
-    String[] args
     String tmpDir
     Path dstDir
+    Path inpath
+    String aspectpath
+    String classpath
 
     Ajc() {
         // logging.captureStandardOutput(LogLevel.INFO)
@@ -91,6 +84,20 @@ class Ajc extends DefaultTask {
         logger.info("=" * 30)
         logger.info("=" * 30)
         logger.info("Running ajc ...")
+        println("inpath: $inpath")
+        println("aspectpath: ${aspectpath}")
+        println("d: $tmpDir")
+        println("classpath: $classpath")
+
+        String[] args = [
+                "-inpath", inpath,
+                "-aspectpath", aspectpath,
+                "-showWeaveInfo",
+                "-1.8",
+                "-d", tmpDir,
+                "-classpath", classpath
+        ];
+        println(project.sourceSets.main.compileClasspath)
 
         MessageHandler handler = new MessageHandler(false);
         println("args: $args")
