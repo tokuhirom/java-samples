@@ -22,8 +22,6 @@ description = """demo"""
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-
-
 repositories {
      maven { url "http://repo.maven.apache.org/maven2" }
 }
@@ -37,6 +35,28 @@ bootRun {
             "file:${project.projectDir}/src/main/resources/templates/",
             "classpath:/templates/"
     ].join(",")
+
+    // -PjvmArgs='...'
+    if ( project.hasProperty('jvmArgs') ) {
+        jvmArgs project.jvmArgs.split('\\s+')
+    }
+}
+
+task benchmark(type: org.springframework.boot.gradle.run.BootRunTask) {
+    doFirst {
+        systemProperties System.properties
+        jvmArgs = [
+                "-server",
+                "-Djava.net.preferIPv4Stack=true",
+                "-Dnetworkaddress.cache.ttl=0",
+                "-Dnetworkaddress.cache.negative.ttl=0",
+                "-XX:OnOutOfMemoryError=\"kill -9 %p\"",
+                "-XX:+OptimizeStringConcat",
+                "-verbose:gc"
+        ]
+        main = "com.example.DemoApplication"
+        classpath = sourceSets.main.runtimeClasspath
+    }
 }
 
 dependencies {
@@ -44,6 +64,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-actuator-docs')
     compile('org.springframework.boot:spring-boot-starter-freemarker')
     compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.springframework.boot:spring-boot-starter-jetty')
 
     compile('com.google.guava:guava:19.0')
 
