@@ -10,8 +10,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class RootController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String root(@RequestParam("name") String name, Model model) {
-        model.addAttribute("name", "name");
+    public String root(Model model) {
         return "index";
+    }
+
+    @RequestMapping(value = "/hello", method = RequestMethod.GET)
+    public String hello(
+            @RequestParam("name") String name, // Get query parameter.
+            Model model) {
+        model.addAttribute("name", name);
+        return "hello";
     }
 }
