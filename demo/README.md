@@ -2,6 +2,16 @@
 
 This application includes some tweaks for writing better spring boot apps.
 
+## Spring MVC
+
+### Show stacktrace on error
+
+Default whitelabel error page is not useful.
+
+I recommend to use my own error page renderer.
+
+See com.example.controller.CustomErrorController.
+
 ## Freemarker
 
 ### layout

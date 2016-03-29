@@ -14,6 +14,11 @@ public class RootController {
         return "index";
     }
 
+    @RequestMapping(value = "/error")
+    public String error(Model model) {
+        return "error";
+    }
+
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
     public String hello(
             @RequestParam("name") String name, // Get query parameter.
