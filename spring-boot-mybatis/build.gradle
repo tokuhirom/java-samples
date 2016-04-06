@@ -10,29 +10,45 @@ buildscript {
 	}
 }
 
-apply plugin: 'java'
 apply plugin: 'idea'
-apply plugin: 'spring-boot' 
 
-jar {
-	baseName = 'demo'
-	version = '0.0.1-SNAPSHOT'
+subprojects {
+	apply plugin: 'java'
+
+	sourceCompatibility = 1.8
+	targetCompatibility = 1.8
+
+	repositories {
+		mavenCentral()
+	}
+
+	dependencies {
+		compile 'org.projectlombok:lombok:1.16.8'
+
+        testCompile "junit:junit:4.12"
+	}
 }
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
 
-repositories {
-	mavenCentral()
+
+project(':sample-infra') {
+	dependencies {
+        compile project(':sample-domain')
+
+		compile 'mysql:mysql-connector-java:5.1.38'
+        compile 'org.mybatis:mybatis:3.3.1'
+    }
 }
 
+project(':sample-web') {
+	apply plugin: 'spring-boot'
 
-dependencies {
-	compile('org.springframework.boot:spring-boot-starter-jdbc')
-	compile('org.springframework.boot:spring-boot-starter-web')
-	runtime('mysql:mysql-connector-java')
-	compile 'org.projectlombok:lombok:1.16.8'
-	compile 'org.mybatis.spring.boot:mybatis-spring-boot-starter:1.0.2'
-	testCompile('org.springframework.boot:spring-boot-starter-test') 
+	dependencies {
+		compile project(':sample-infra')
+		compile('org.springframework.boot:spring-boot-starter-jdbc')
+		compile('org.springframework.boot:spring-boot-starter-web')
+		compile 'org.mybatis.spring.boot:mybatis-spring-boot-starter:1.0.2'
+		testCompile('org.springframework.boot:spring-boot-starter-test')
+	}
 }
 
 task wrapper(type: Wrapper) {
