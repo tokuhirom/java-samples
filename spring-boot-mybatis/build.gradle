@@ -29,10 +29,17 @@ subprojects {
 	}
 }
 
+project(':sample-factory') {
+    dependencies {
+        compile project(':sample-domain')
+        compile "org.projectlombok:lombok:1.16.8"
+    }
+}
 
 project(':sample-infra') {
 	dependencies {
         compile project(':sample-domain')
+        compile project(':sample-factory')
 
         compile "javax.inject:javax.inject:1"
         compile "org.assertj:assertj-core:3.4.0"

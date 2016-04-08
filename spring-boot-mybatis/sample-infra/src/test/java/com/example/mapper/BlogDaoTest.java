@@ -1,5 +1,6 @@
 package com.example.mapper;
 
+import com.example.FactoryData;
 import com.example.domain.Blog;
 import org.junit.Test;
 
@@ -14,8 +15,7 @@ public class BlogDaoTest extends DaoTestBase {
 
     @Test
     public void findAll() throws Exception {
-        Blog blog = new Blog();
-        blog.setTitle("hoge");
+        Blog blog = FactoryData.blog("hoge");
 
         blogDao.insert(blog);
         assertThat(blog.getId()).isNotEqualTo(0);
@@ -23,5 +23,4 @@ public class BlogDaoTest extends DaoTestBase {
         List<Blog> blogs = blogDao.findAll();
         assertThat(blogs).contains(blog);
     }
-
 }
