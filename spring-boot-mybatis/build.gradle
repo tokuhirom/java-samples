@@ -35,6 +35,7 @@ project(':sample-infra') {
         compile project(':sample-domain')
 
         compile "javax.inject:javax.inject:1"
+        compile "org.assertj:assertj-core:3.4.0"
 		compile 'mysql:mysql-connector-java:5.1.38'
         compile 'org.mybatis:mybatis:3.3.1'
     }

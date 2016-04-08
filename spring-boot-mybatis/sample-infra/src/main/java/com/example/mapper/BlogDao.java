@@ -5,9 +5,10 @@ import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
-public interface BlogMapper {
-    @Select("SELECT * FROM blog")
+public interface BlogDao {
     List<Blog> findAll();
+
+    void insert(Blog blog);
 
     @Select("SELECT * FROM blog WHERE id=#{id}")
     List<Blog> findById(String id);

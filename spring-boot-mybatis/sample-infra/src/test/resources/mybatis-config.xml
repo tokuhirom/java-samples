@@ -7,14 +7,14 @@
         <environment id="development">
             <transactionManager type="JDBC"/>
             <dataSource type="POOLED">
-                <property name="driver" value="${driver}"/>
-                <property name="url" value="${}"/>
-                <property name="username" value="${username}"/>
-                <property name="password" value="${password}"/>
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost/test"/>
+                <property name="username" value="root"/>
+                <property name="password" value=""/>
             </dataSource>
         </environment>
     </environments>
     <mappers>
-        <mapper resource="mapper/BlogMapper.xml"/>
+        <mapper resource="mapper/BlogDao.xml"/>
     </mappers>
 </configuration>
