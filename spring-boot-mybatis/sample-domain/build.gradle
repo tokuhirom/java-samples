@@ -1,0 +1,4 @@
+version 'unspecified'
+
+apply plugin: 'java'
+
