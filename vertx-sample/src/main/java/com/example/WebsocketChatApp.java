@@ -22,6 +22,15 @@ public class WebsocketChatApp {
         // handle top page.
         router.route("/").handler(r -> r.response().sendFile("chat.html"));
 
+        router.route("/myapp/*").handler(buildSockJSHandler(vertx));
+
+        // handle static contents
+        router.route("/static/*").handler(StaticHandler.create());
+
+        httpServer.requestHandler(router::accept).listen(8181);
+    }
+
+    private static SockJSHandler buildSockJSHandler(Vertx vertx) {
         ConcurrentHashMap<String, SockJSSocket> sockets = new ConcurrentHashMap<>();
 
         SockJSHandlerOptions options = new SockJSHandlerOptions().setHeartbeatInterval(2000);
@@ -48,11 +57,6 @@ public class WebsocketChatApp {
                 sockets.remove(sockJSSocket.writeHandlerID());
             });
         });
-        router.route("/myapp/*").handler(sockJSHandler);
-
-        // handle static contents
-        router.route("/static/*").handler(StaticHandler.create());
-
-        httpServer.requestHandler(router::accept).listen(8181);
+        return sockJSHandler;
     }
 }
