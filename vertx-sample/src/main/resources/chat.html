@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<body>
+<script src="//cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.0.3/sockjs.js"></script>
+State: <div id="state">Loading...</div>
+<form id="messageForm">
+    <input type="text" name="message">
+    <button type="submit">Send</button>
+</form>
+<div id="log"></div>
+<script>
+    var sock = new SockJS('/myapp');
+    var stateElem = document.getElementById("state");
+    var logElem = document.getElementById("log");
+    var messageForm = document.getElementById("messageForm");
+
+    messageForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        var msgElem = messageForm.querySelector("input[name='message']");
+        var msg = msgElem.value;
+        msgElem.value = '';
+        if (msg.length > 0) {
+            sock.send(msg);
+        }
+    }, false);
+
+    sock.onopen = function() {
+        stateElem.innerHTML = "opened";
+    };
+
+    sock.onmessage = function(e) {
+        var itemElem = document.createElement("div");
+        itemElem.textContent = e.data;
+        logElem.insertBefore(itemElem, logElem.firstChild);
+    };
+
+    sock.onclose = function() {
+        stateElem.innerHTML = "closed";
+    };
+</script>
+</body>
+</html>
