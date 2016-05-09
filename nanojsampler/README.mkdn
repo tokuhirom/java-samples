@@ -1,0 +1,6 @@
+java agent sample code.
+
+profile java application via sampler agent.
+
+    java -javaagent:$PWD/build/libs/nanojsampler-1.0-SNAPSHOT.jar=300 -jar /Users/tokuhirom/Downloads/jenkins.war
+
