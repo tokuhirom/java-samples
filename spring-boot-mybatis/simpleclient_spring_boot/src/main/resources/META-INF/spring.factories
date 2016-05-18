@@ -1,0 +1,2 @@
+org.springframework.boot.actuate.autoconfigure.ManagementContextConfiguration=\
+io.prometheus.client.spring_boot.SpringBootExporterAutoConfiguration

@@ -53,8 +53,10 @@ project(':sample-web') {
 
 	dependencies {
 		compile project(':sample-infra')
+		compile project(':simpleclient_spring_boot')
 		compile('org.springframework.boot:spring-boot-starter-jdbc')
 		compile('org.springframework.boot:spring-boot-starter-web')
+		compile('org.springframework.boot:spring-boot-starter-actuator')
 		compile 'org.mybatis.spring.boot:mybatis-spring-boot-starter:1.0.2'
 		testCompile('org.springframework.boot:spring-boot-starter-test')
 	}
