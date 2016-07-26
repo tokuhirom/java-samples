@@ -60,10 +60,8 @@ public class AsyncGracefulStopHandler extends HandlerWrapper implements Graceful
         super.handle(target, request, httpServletRequest, response);
 
         HttpChannelState state = request.getHttpChannelState();
-        if (state.isSuspended()) {
-            if (state.isInitial()) {
-                state.addListener(_onCompletion);
-            }
+        if (state.isAsync()) {
+            state.addListener(_onCompletion);
         }
 
         FutureCallback shutdown = _shutdown.get();
@@ -73,6 +71,7 @@ public class AsyncGracefulStopHandler extends HandlerWrapper implements Graceful
                 shutdown.succeeded();
             }
         }
+
     }
 
     private boolean isFinished() {
