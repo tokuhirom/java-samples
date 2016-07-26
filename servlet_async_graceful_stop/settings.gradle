@@ -1,0 +1,3 @@
+rootProject.name = 'servlet_async_graceful_stop'
+include 'servlet_async_graceful_stop_jetty'
+
