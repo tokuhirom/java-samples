@@ -61,18 +61,6 @@ public class Httpd {
     }
 
     private void startClient() {
-//        try {
-//            OkHttpClient build = new OkHttpClient.Builder()
-//                    .build();
-//            Response execute = build.newCall(
-//                    new Request.Builder()
-//                            .url("http://localhost:18080/foo")
-//                            .build())
-//                    .execute();
-//            log.info("wtf {}", execute.body().string());
-//        } catch (IOException e) {
-//            throw new UncheckedIOException(e);
-//        }
         try (Socket clientSocket = new Socket("localhost", 18080);
              DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream())
         ) {

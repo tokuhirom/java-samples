@@ -43,6 +43,8 @@ public class AsyncGracefulStopHandler extends HandlerWrapper implements Graceful
         @Override
         public void onComplete(AsyncEvent event) throws IOException {
             log.info("Finished async request: {}", event.toString());
+
+            // Without this, jetty doesn't send response.
             event.getSuppliedResponse().flushBuffer();
 
             FutureCallback shutdown = _shutdown.get();
