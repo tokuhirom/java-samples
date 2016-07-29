@@ -44,7 +44,7 @@ public class Httpd {
         startSignal.await();
 
         server.setStopTimeout(7000);
-        server.setDumpBeforeStop(true);
+//        server.setDumpBeforeStop(true);
 
         log.info("async threads: {}, active requests: {}",
                 statisticsHandler.getAsyncRequestsWaiting(),
@@ -82,6 +82,12 @@ public class Httpd {
                     break;
                 }
                 builder.append(new String(buf, 0, read)).append("\\n");
+                log.info("Got response(in progress): {}, {},{},{}, {}",
+                        builder.toString(),
+                        clientSocket.isConnected(),
+                        clientSocket.isBound(),
+                        clientSocket.isInputShutdown(),
+                        clientSocket.isClosed());
             }
         } catch (IOException e) {
             log.error("IOException", e);

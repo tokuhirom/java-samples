@@ -10,9 +10,9 @@ repositories {
 }
 
 dependencies {
-    compile 'org.eclipse.jetty:jetty-server:9.3.0.M2'
-    compile 'org.eclipse.jetty:jetty-servlet:9.3.0.M2'
-    compile 'org.eclipse.jetty:jetty-jmx:9.3.0.M2'
+    compile 'org.eclipse.jetty:jetty-server:9.4.0.M1'
+    compile 'org.eclipse.jetty:jetty-servlet:9.4.0.M1'
+    compile 'org.eclipse.jetty:jetty-jmx:9.4.0.M1'
 
     compile 'org.slf4j:slf4j-api:1.7.12'
     compile 'org.slf4j:slf4j-simple:1.7.12'

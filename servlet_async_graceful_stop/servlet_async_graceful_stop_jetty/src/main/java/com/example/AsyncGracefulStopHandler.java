@@ -11,6 +11,7 @@ import org.eclipse.jetty.util.component.Graceful;
 import javax.servlet.AsyncEvent;
 import javax.servlet.AsyncListener;
 import javax.servlet.ServletException;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -29,26 +30,31 @@ public class AsyncGracefulStopHandler extends HandlerWrapper implements Graceful
     private final AsyncListener _onCompletion = new AsyncListener() {
         @Override
         public void onTimeout(AsyncEvent event) throws IOException {
+            log.info("timeout: {}", event);
         }
 
         @Override
         public void onStartAsync(AsyncEvent event) throws IOException {
+            log.info("start: {}", event);
             event.getAsyncContext().addListener(this);
         }
 
         @Override
         public void onError(AsyncEvent event) throws IOException {
+            log.info("error: {}", event);
         }
 
         @Override
         public void onComplete(AsyncEvent event) throws IOException {
             log.info("Finished async request: {}", event.toString());
 
-            // Without this, jetty doesn't send response.
-            event.getSuppliedResponse().flushBuffer();
-
             FutureCallback shutdown = _shutdown.get();
             if (shutdown != null) {
+                // Without this, jetty doesn't send response.
+//                event.getSuppliedResponse().flushBuffer();
+//                ServletResponse suppliedResponse = event.getSuppliedResponse();
+//                suppliedResponse.flushBuffer();
+
                 if (isFinished()) {
                     log.info("shutdown on onComplete");
                     shutdown.succeeded();

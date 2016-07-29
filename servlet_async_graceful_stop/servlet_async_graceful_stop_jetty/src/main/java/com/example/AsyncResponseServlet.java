@@ -42,6 +42,7 @@ public class AsyncResponseServlet extends HttpServlet {
             resp.setStatus(200);
             try {
                 resp.getWriter().print("OK\n");
+                resp.getWriter().close();
             } catch (IOException e) {
                 log.error("Can't send response", e);
             } finally {

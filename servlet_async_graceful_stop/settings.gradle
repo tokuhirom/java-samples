@@ -1,4 +1,5 @@
 rootProject.name = 'servlet_async_graceful_stop'
 include 'servlet_async_graceful_stop_jetty'
 include 'servlet_async_graceful_stop_undertow'
+include 'servlet_async_graceful_stop_tomcat'
 
