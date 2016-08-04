@@ -82,7 +82,7 @@ public class Httpd {
                     break;
                 }
                 builder.append(new String(buf, 0, read)).append("\\n");
-                log.info("Got response(in progress): {}, {},{},{}, {}",
+                log.info("Got response(in progress: {}, {},{},{}, {}",
                         builder.toString(),
                         clientSocket.isConnected(),
                         clientSocket.isBound(),

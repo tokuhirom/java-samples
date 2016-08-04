@@ -58,7 +58,6 @@ public class TomcatApp {
 
             if (state == LifecycleState.STOPPING) {
                 log.info("Stopping!!!");
-
             }
         });
 
