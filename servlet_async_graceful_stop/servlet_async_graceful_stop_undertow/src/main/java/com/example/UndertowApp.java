@@ -192,7 +192,7 @@ public class UndertowApp {
                 try {
                     Thread.sleep(3L * 1000);
                 } catch (InterruptedException e) {
-                    Thread.currentThread().interrupted();
+                    Thread.currentThread().interrupt();
                 }
 
                 AsyncResponseServlet.log.info("Sending response");
